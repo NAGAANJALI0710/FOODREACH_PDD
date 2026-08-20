@@ -1,0 +1,180 @@
+# FoodReach AI — Artillery Load Testing Suite
+# Covers: Baseline | Stress | Spike scenarios
+# Usage:
+#   Baseline: artillery run --target https://your-api.com automation/load-tests/artillery-load-test.yml
+#   Or set the TARGET env var: TARGET=https://api.onrender.com artillery run ...
+config:
+  target: "{{ $env.TARGET || 'https://foodreach-backend.onrender.com' }}"
+  environments:
+    # ── Baseline: 100 users for 1 minute ──────────────────────────────────────
+    baseline:
+      phases:
+        - name: "Warm-up"
+          duration: 10
+          arrivalRate: 10
+        - name: "Baseline Load (100 VUs)"
+          duration: 60
+          arrivalRate: 100
+        - name: "Ramp-down"
+          duration: 10
+          arrivalRate: 10
+    # ── Stress: ramp to 500 users ─────────────────────────────────────────────
+    stress:
+      phases:
+        - name: "Ramp-up to 200"
+          duration: 120
+          arrivalRate: 200
+        - name: "Hold 200"
+          duration: 180
+          arrivalRate: 200
+        - name: "Ramp-up to 500"
+          duration: 120
+          arrivalRate: 500
+        - name: "Hold 500"
+          duration: 180
+          arrivalRate: 500
+        - name: "Ramp-down"
+          duration: 60
+          arrivalRate: 10
+    # ── Spike: 50 → 500 users suddenly ───────────────────────────────────────
+    spike:
+      phases:
+        - name: "Normal load"
+          duration: 30
+          arrivalRate: 50
+        - name: "SPIKE to 500"
+          duration: 10
+          arrivalRate: 500
+        - name: "Hold spike"
+          duration: 180
+          arrivalRate: 500
+        - name: "Recovery"
+          duration: 10
+          arrivalRate: 50
+        - name: "Verify recovery"
+          duration: 60
+          arrivalRate: 50
+        - name: "Ramp-down"
+          duration: 30
+          arrivalRate: 0
+  # Default phases (run when no --environment flag)
+  phases:
+    - name: "Baseline — 100 VUs for 1 min"
+      duration: 60
+      arrivalRate: 100
+  http:
+    timeout: 10
+    pool: 50
+  plugins:
+    metrics-by-endpoint: {}
+  ensure:
+    p95: 2000    # 95th percentile response time < 2000ms
+    maxErrorRate: 5   # Error rate < 5%
+  processor: "./processor.js"
+
+# ── Shared headers ─────────────────────────────────────────────────────────────
+defaults:
+  headers:
+    Content-Type: "application/json"
+    Accept: "application/json"
+
+# ── Scenarios ─────────────────────────────────────────────────────────────────
+scenarios:
+  # Health Check (weight 5 — lightweight probe)
+  - name: "Health Check"
+    weight: 5
+    flow:
+      - get:
+          url: "/health"
+          expect:
+            - statusCode: 200
+
+  # Authentication flow (weight 30)
+  - name: "Authentication Flow"
+    weight: 30
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "donor@foodreach.test"
+            password: "Test@12345"
+          capture:
+            - json: "$.token"
+              as: "authToken"
+          expect:
+            - statusCode:
+                - 200
+                - 201
+                - 400
+                - 401
+
+      - think: 1
+
+      # Attempt invalid login (must return 4xx, not 500)
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "invalid@notexist.com"
+            password: "WrongPassword!"
+          expect:
+            - statusCode:
+                - 400
+                - 401
+                - 422
+
+  # Donation listing (weight 40)
+  - name: "Donation Browsing"
+    weight: 40
+    flow:
+      - get:
+          url: "/api/donations"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 403
+
+      - think: 0.5
+
+      - get:
+          url: "/api/donations?status=available&limit=20"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+
+  # Donation creation (weight 15)
+  - name: "Donation Creation"
+    weight: 15
+    flow:
+      - post:
+          url: "/api/donations"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          json:
+            title: "Artillery Test Donation {{ $randomString() }}"
+            description: "Load test donation"
+            quantity: 5
+            unit: "kg"
+            foodType: "dry"
+          expect:
+            - statusCode:
+                - 200
+                - 201
+                - 400
+                - 401
+                - 403
+
+  # Notification check (weight 10)
+  - name: "Notifications"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/notifications"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode:
+                - 200
+                - 401
+                - 403

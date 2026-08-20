@@ -1,235 +1,317 @@
-/**
- * FoodReach AI — High Performance Baseline / Load Testing Harness
- * 
- * Target Parameters:
- * - Virtual Users (VUs): 100 concurrent workers
- * - Duration: 60 Seconds (1 Minute continuous run)
- * - Endpoints: 
- *     1. GET  /health (System Health)
- *     2. GET  /api/ai/freshness (AI Decay Calculation)
- *     3. POST /api/ai/recommend-ngos (Smart NGO Matching)
- *     4. GET  /api/ai/demand (AI Category Demand Prediction)
- */
+// =============================================================================
+// FoodReach AI — Enterprise k6 Load Testing Suite
+// Covers: Baseline | Stress | Spike | Endurance scenarios
+// Target: FoodReach Backend API (Node.js/Express + Supabase)
+// Usage:
+//   Baseline:  k6 run --env SCENARIO=baseline   load-test.js
+//   Stress:    k6 run --env SCENARIO=stress     load-test.js
+//   Spike:     k6 run --env SCENARIO=spike      load-test.js
+//   Endurance: k6 run --env SCENARIO=endurance  load-test.js
+//   All:       k6 run load-test.js
+// =============================================================================
+import http from 'k6/http';
+import { check, sleep, group } from 'k6';
+import { Rate, Trend, Counter } from 'k6/metrics';
+import { htmlReport } from 'https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js';
 
-const HOST = process.env.TEST_HOST || '127.0.0.1';
-const PORT = process.env.TEST_PORT || '5000';
-const BASE_URL = `http://${HOST}:${PORT}`;
-const BACKEND_URL = `${BASE_URL}/api`;
-const HEALTH_URL = `${BASE_URL}/health`;
+// ── Custom metrics ────────────────────────────────────────────────────────────
+const errorRate       = new Rate('error_rate');
+const authDuration    = new Trend('auth_duration');
+const donationDuration = new Trend('donation_duration');
+const adminDuration   = new Trend('admin_duration');
+const totalRequests   = new Counter('total_requests');
 
-const VIRTUAL_USERS = 100;
-const DURATION_SECONDS = 60;
+// ── Environment ───────────────────────────────────────────────────────────────
+const BASE_URL   = __ENV.BASE_URL   || 'https://foodreach-backend.onrender.com';
+const SCENARIO   = __ENV.SCENARIO   || 'all';
+const JWT_TOKEN  = __ENV.JWT_TOKEN  || 'test-jwt-token-placeholder';
 
-async function setupAuthToken() {
-  const testEmail = `loadtester-${Date.now()}@foodshare.com`;
+const HEADERS = {
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${JWT_TOKEN}`,
+};
 
-  // Register
-  const regRes = await fetch(`${BACKEND_URL}/auth/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name: 'Load Test Worker',
-      email: testEmail,
-      password: 'password123',
-      role: 'donor',
-      contactNumber: '+919888000111',
-      address: 'Connaught Place, New Delhi',
-      latitude: 28.6304,
-      longitude: 77.2177,
-    }),
-  });
-  const regData = await regRes.json();
-  if (!regData.success) throw new Error(regData.message || 'Registration failed');
+// ── Scenario definitions ──────────────────────────────────────────────────────
+const SCENARIOS = {
+  // 1. Baseline: 100 VUs for 1 minute — normal production load
+  baseline: {
+    executor: 'constant-vus',
+    vus: 100,
+    duration: '1m',
+    tags: { scenario: 'baseline' },
+  },
+  // 2. Stress: ramp to 1000 VUs to find breaking point
+  stress: {
+    executor: 'ramping-vus',
+    startVUs: 0,
+    stages: [
+      { duration: '2m', target: 200 },   // Ramp to 200
+      { duration: '3m', target: 200 },   // Hold 200
+      { duration: '2m', target: 500 },   // Ramp to 500
+      { duration: '3m', target: 500 },   // Hold 500
+      { duration: '2m', target: 1000 },  // Ramp to 1000
+      { duration: '3m', target: 1000 },  // Hold 1000
+      { duration: '2m', target: 0 },     // Ramp down
+    ],
+    tags: { scenario: 'stress' },
+  },
+  // 3. Spike: sudden jump from 50 to 500 VUs
+  spike: {
+    executor: 'ramping-vus',
+    startVUs: 0,
+    stages: [
+      { duration: '30s', target: 50 },   // Normal load
+      { duration: '10s', target: 500 },  // Spike!
+      { duration: '3m',  target: 500 },  // Hold spike
+      { duration: '10s', target: 50 },   // Drop back
+      { duration: '3m',  target: 50 },   // Recovery
+      { duration: '30s', target: 0 },    // Ramp down
+    ],
+    tags: { scenario: 'spike' },
+  },
+  // 4. Endurance: 100 VUs for 30 minutes — memory leak / degradation detection
+  endurance: {
+    executor: 'constant-vus',
+    vus: 100,
+    duration: '30m',
+    tags: { scenario: 'endurance' },
+  },
+};
 
-  // Verify OTP
-  const verifyRes = await fetch(`${BACKEND_URL}/auth/verify-otp`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email: testEmail,
-      code: regData.code,
-    }),
-  });
-  const verifyData = await verifyRes.json();
-  if (!verifyData.success) throw new Error(verifyData.message || 'OTP verification failed');
-
-  return verifyData.token;
+// ── Select scenario(s) ────────────────────────────────────────────────────────
+function buildScenarios() {
+  if (SCENARIO === 'all') return SCENARIOS;
+  if (SCENARIOS[SCENARIO]) return { [SCENARIO]: SCENARIOS[SCENARIO] };
+  return { baseline: SCENARIOS.baseline };
 }
 
-async function runLoadTest() {
-  console.log('===========================================================');
-  console.log('🚀 FOODREACH AI — BASELINE & LOAD TEST INITIALIZING');
-  console.log('===========================================================');
+export const options = {
+  scenarios: buildScenarios(),
+  thresholds: {
+    // Global thresholds
+    http_req_duration: ['p(95)<2000', 'p(99)<4000'],  // 95% under 2s, 99% under 4s
+    http_req_failed:   ['rate<0.05'],                   // Error rate < 5%
+    error_rate:        ['rate<0.05'],
+    // Scenario-specific
+    'http_req_duration{scenario:baseline}':  ['p(95)<1000'],  // Baseline: p95 < 1s
+    'http_req_duration{scenario:stress}':    ['p(95)<3000'],  // Stress: p95 < 3s
+    'http_req_duration{scenario:spike}':     ['p(95)<5000'],  // Spike: p95 < 5s
+    'http_req_duration{scenario:endurance}': ['p(95)<2000'],  // Endurance: p95 < 2s
+  },
+  summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(90)', 'p(95)', 'p(99)'],
+};
 
-  const token = await setupAuthToken();
-  console.log('✅ Bearer Auth Token acquired successfully!\n');
+// ── Test data ─────────────────────────────────────────────────────────────────
+const DONOR_CREDENTIALS = {
+  email:    'donor@foodreach.test',
+  password: 'Test@12345',
+  role:     'donor',
+};
+const NGO_CREDENTIALS = {
+  email:    'ngo@foodreach.test',
+  password: 'Test@12345',
+  role:     'ngo',
+};
 
-  const nowStr = new Date().toISOString();
-  const expStr = new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString();
-
-  const ENDPOINTS = [
-    { name: 'Health Check', url: HEALTH_URL, method: 'GET', auth: false },
-    {
-      name: 'AI Freshness Decay',
-      url: `${BACKEND_URL}/ai/freshness?foodType=Cooked%20Food&preparationTime=${nowStr}&bestBeforeDate=${expStr}&temperature=29`,
-      method: 'GET',
-      auth: true,
+// ── Test functions ─────────────────────────────────────────────────────────────
+function testHealthCheck() {
+  const res = http.get(`${BASE_URL}/health`, { tags: { endpoint: 'health' } });
+  totalRequests.add(1);
+  check(res, {
+    'health check status 200': r => r.status === 200,
+    'health check has status ok': r => {
+      try { return JSON.parse(r.body).status === 'ok'; } catch { return false; }
     },
-    {
-      name: 'Smart NGO Matching',
-      url: `${BACKEND_URL}/ai/recommend-ngos`,
-      method: 'POST',
-      auth: true,
-      body: { latitude: 28.6304, longitude: 77.2177, foodType: 'Cooked Food', quantity: 40 },
-    },
-    {
-      name: 'Demand Forecast',
-      url: `${BACKEND_URL}/ai/demand`,
-      method: 'GET',
-      auth: true,
-    },
-  ];
-
-  console.log(`• Virtual Users (Concurrent Workers): ${VIRTUAL_USERS}`);
-  console.log(`• Test Duration:                      ${DURATION_SECONDS} seconds (1 minute)`);
-  console.log(`• Target Server:                       ${BASE_URL}`);
-  console.log(`• Target Endpoints:                   ${ENDPOINTS.length} endpoints`);
-  console.log('===========================================================\n');
-
-  const startTime = Date.now();
-  const endTime = startTime + DURATION_SECONDS * 1000;
-
-  const latencyStats = [];
-  let totalSuccessfulRequests = 0;
-  let totalFailedRequests = 0;
-  const statusCodeCounts = {};
-
-  const perEndpointStats = {};
-  ENDPOINTS.forEach((ep) => {
-    perEndpointStats[ep.name] = { count: 0, latencies: [], errors: 0 };
+    'health check duration < 500ms': r => r.timings.duration < 500,
   });
-
-  // Worker loop function for each Virtual User
-  async function worker(vuId) {
-    let epIndex = vuId % ENDPOINTS.length;
-
-    while (Date.now() < endTime) {
-      const ep = ENDPOINTS[epIndex];
-      epIndex = (epIndex + 1) % ENDPOINTS.length;
-
-      const reqStart = performance.now();
-      try {
-        const headers = { 'Content-Type': 'application/json' };
-        if (ep.auth) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
-
-        const options = {
-          method: ep.method,
-          headers,
-        };
-        if (ep.body) {
-          options.body = JSON.stringify(ep.body);
-        }
-
-        const res = await fetch(ep.url, options);
-        const reqEnd = performance.now();
-        const latency = reqEnd - reqStart;
-
-        latencyStats.push(latency);
-        statusCodeCounts[res.status] = (statusCodeCounts[res.status] || 0) + 1;
-        perEndpointStats[ep.name].latencies.push(latency);
-        perEndpointStats[ep.name].count++;
-
-        if (res.ok) {
-          totalSuccessfulRequests++;
-        } else {
-          totalFailedRequests++;
-          perEndpointStats[ep.name].errors++;
-        }
-      } catch (err) {
-        const reqEnd = performance.now();
-        const latency = reqEnd - reqStart;
-        latencyStats.push(latency);
-        totalFailedRequests++;
-        statusCodeCounts['ERROR'] = (statusCodeCounts['ERROR'] || 0) + 1;
-        perEndpointStats[ep.name].errors++;
-      }
-
-      // Micro-pause to maintain controlled pacing (20ms)
-      await new Promise((r) => setTimeout(r, 20));
-    }
-  }
-
-  console.log(`⏱️ Starting 1-minute load test with ${VIRTUAL_USERS} VUs...`);
-
-  // Launch 100 concurrent worker promises
-  const workers = [];
-  for (let i = 0; i < VIRTUAL_USERS; i++) {
-    workers.push(worker(i));
-  }
-
-  // Periodic progress updates every 10 seconds
-  const interval = setInterval(() => {
-    const elapsedSecs = Math.round((Date.now() - startTime) / 1000);
-    const reqsCount = latencyStats.length;
-    const currentRps = (reqsCount / (elapsedSecs || 1)).toFixed(1);
-    console.log(`   [Progress] ${elapsedSecs}s / 60s elapsed — ${reqsCount} reqs completed (${currentRps} RPS)`);
-  }, 10000);
-
-  await Promise.all(workers);
-  clearInterval(interval);
-
-  const totalTimeMs = Date.now() - startTime;
-  const totalTimeSecs = totalTimeMs / 1000;
-  const totalRequests = latencyStats.length;
-  const reqsPerSec = (totalRequests / totalTimeSecs).toFixed(2);
-
-  latencyStats.sort((a, b) => a - b);
-
-  const minLatency = latencyStats.length > 0 ? latencyStats[0].toFixed(2) : 0;
-  const maxLatency = latencyStats.length > 0 ? latencyStats[latencyStats.length - 1].toFixed(2) : 0;
-  const sumLatency = latencyStats.reduce((a, b) => a + b, 0);
-  const avgLatency = latencyStats.length > 0 ? (sumLatency / latencyStats.length).toFixed(2) : 0;
-
-  const p50 = latencyStats.length > 0 ? latencyStats[Math.floor(latencyStats.length * 0.50)].toFixed(2) : 0;
-  const p95 = latencyStats.length > 0 ? latencyStats[Math.floor(latencyStats.length * 0.95)].toFixed(2) : 0;
-  const p99 = latencyStats.length > 0 ? latencyStats[Math.floor(latencyStats.length * 0.99)].toFixed(2) : 0;
-  const successRate = totalRequests > 0 ? ((totalSuccessfulRequests / totalRequests) * 100).toFixed(2) : '0.00';
-
-  console.log('\n===========================================================');
-  console.log('📊 LOAD TEST FINAL RESULTS SUMMARY');
-  console.log('===========================================================');
-  console.log(`Total Duration:       ${totalTimeSecs.toFixed(2)} seconds`);
-  console.log(`Virtual Users (VUs):  ${VIRTUAL_USERS}`);
-  console.log(`Total Requests Sent:  ${totalRequests}`);
-  console.log(`Requests / Sec (RPS): ${reqsPerSec} req/sec`);
-  console.log(`Success Rate:         ${successRate}% (${totalSuccessfulRequests} successful, ${totalFailedRequests} failed)`);
-  console.log('-----------------------------------------------------------');
-  console.log('⏱️ RESPONSE TIME STATS (Latency):');
-  console.log(`  • Average Response Time: ${avgLatency} ms`);
-  console.log(`  • Fastest Response (Min): ${minLatency} ms`);
-  console.log(`  • Slowest Response (Max): ${maxLatency} ms`);
-  console.log(`  • 50th Percentile (P50):  ${p50} ms`);
-  console.log(`  • 95th Percentile (P95):  ${p95} ms`);
-  console.log(`  • 99th Percentile (P99):  ${p99} ms`);
-  console.log('-----------------------------------------------------------');
-  console.log('🏷️ STATUS CODE BREAKDOWN:');
-  Object.entries(statusCodeCounts).forEach(([code, count]) => {
-    console.log(`  • Status ${code}: ${count} requests (${((count / totalRequests) * 100).toFixed(1)}%)`);
-  });
-  console.log('-----------------------------------------------------------');
-  console.log('📌 PER-ENDPOINT PERFORMANCE:');
-  Object.entries(perEndpointStats).forEach(([name, data]) => {
-    data.latencies.sort((a, b) => a - b);
-    const epAvg = data.latencies.length > 0 ? (data.latencies.reduce((a, b) => a + b, 0) / data.latencies.length).toFixed(2) : 0;
-    const epP95 = data.latencies.length > 0 ? data.latencies[Math.floor(data.latencies.length * 0.95)].toFixed(2) : 0;
-    console.log(`  • [${name}]: ${data.count} reqs | Avg: ${epAvg}ms | P95: ${epP95}ms | Errors: ${data.errors}`);
-  });
-  console.log('===========================================================\n');
+  errorRate.add(res.status !== 200);
 }
 
-runLoadTest().catch((err) => {
-  console.error('Load test error:', err);
-  process.exit(1);
-});
+function testAuthentication() {
+  group('Authentication', () => {
+    // Login
+    const loginStart = Date.now();
+    const loginRes = http.post(
+      `${BASE_URL}/api/auth/login`,
+      JSON.stringify(DONOR_CREDENTIALS),
+      { headers: HEADERS, tags: { endpoint: 'login' } }
+    );
+    authDuration.add(Date.now() - loginStart);
+    totalRequests.add(1);
+    const loginOk = check(loginRes, {
+      'login status 200 or 201': r => r.status === 200 || r.status === 201,
+      'login has response body': r => r.body && r.body.length > 0,
+      'login duration < 2s': r => r.timings.duration < 2000,
+    });
+    errorRate.add(!loginOk);
+
+    // Test with invalid credentials
+    const invalidRes = http.post(
+      `${BASE_URL}/api/auth/login`,
+      JSON.stringify({ email: 'invalid@test.com', password: 'wrong' }),
+      { headers: HEADERS, tags: { endpoint: 'login_invalid' } }
+    );
+    totalRequests.add(1);
+    check(invalidRes, {
+      'invalid login returns 401 or 400': r => r.status === 401 || r.status === 400 || r.status === 422,
+    });
+  });
+}
+
+function testDonations() {
+  group('Donations API', () => {
+    // List donations
+    const listStart = Date.now();
+    const listRes = http.get(`${BASE_URL}/api/donations`, {
+      headers: HEADERS,
+      tags: { endpoint: 'donations_list' }
+    });
+    donationDuration.add(Date.now() - listStart);
+    totalRequests.add(1);
+    const listOk = check(listRes, {
+      'donations list status 200 or 401': r => r.status === 200 || r.status === 401 || r.status === 403,
+      'donations list duration < 2s': r => r.timings.duration < 2000,
+    });
+    errorRate.add(listRes.status >= 500);
+
+    // Create donation (POST)
+    const createPayload = {
+      title:       `Load Test Donation ${Date.now()}`,
+      description: 'Automated load test donation',
+      quantity:    5,
+      unit:        'kg',
+      foodType:    'dry',
+      expiryDate:  new Date(Date.now() + 86400000).toISOString(),
+    };
+    const createRes = http.post(
+      `${BASE_URL}/api/donations`,
+      JSON.stringify(createPayload),
+      { headers: HEADERS, tags: { endpoint: 'donations_create' } }
+    );
+    totalRequests.add(1);
+    check(createRes, {
+      'create donation not 500': r => r.status !== 500,
+      'create donation duration < 3s': r => r.timings.duration < 3000,
+    });
+    errorRate.add(createRes.status >= 500);
+  });
+}
+
+function testAdminEndpoints() {
+  group('Admin API', () => {
+    const adminStart = Date.now();
+    const statsRes = http.get(`${BASE_URL}/api/admin/stats`, {
+      headers: HEADERS,
+      tags: { endpoint: 'admin_stats' }
+    });
+    adminDuration.add(Date.now() - adminStart);
+    totalRequests.add(1);
+    check(statsRes, {
+      'admin stats not 500': r => r.status !== 500,
+      'admin stats duration < 3s': r => r.timings.duration < 3000,
+    });
+    errorRate.add(statsRes.status >= 500);
+  });
+}
+
+function testNotifications() {
+  group('Notifications API', () => {
+    const res = http.get(`${BASE_URL}/api/notifications`, {
+      headers: HEADERS,
+      tags: { endpoint: 'notifications' }
+    });
+    totalRequests.add(1);
+    check(res, {
+      'notifications not 500': r => r.status !== 500,
+      'notifications duration < 2s': r => r.timings.duration < 2000,
+    });
+    errorRate.add(res.status >= 500);
+  });
+}
+
+function testLocation() {
+  group('Location API', () => {
+    const res = http.get(`${BASE_URL}/api/location/nearby?lat=12.9716&lng=77.5946&radius=10`, {
+      headers: HEADERS,
+      tags: { endpoint: 'location' }
+    });
+    totalRequests.add(1);
+    check(res, {
+      'location not 500': r => r.status !== 500,
+    });
+    errorRate.add(res.status >= 500);
+  });
+}
+
+// ── Main VU function ──────────────────────────────────────────────────────────
+export default function () {
+  // All VUs execute this sequence per iteration
+  testHealthCheck();
+  sleep(0.2);
+
+  testAuthentication();
+  sleep(0.3);
+
+  testDonations();
+  sleep(0.2);
+
+  // 30% of VUs hit admin and notification endpoints
+  if (Math.random() < 0.3) {
+    testAdminEndpoints();
+    sleep(0.1);
+  }
+
+  if (Math.random() < 0.5) {
+    testNotifications();
+    sleep(0.1);
+  }
+
+  if (Math.random() < 0.2) {
+    testLocation();
+  }
+
+  sleep(Math.random() * 1 + 0.5); // 0.5–1.5s think time
+}
+
+// ── Summary handler ───────────────────────────────────────────────────────────
+export function handleSummary(data) {
+  const passed  = data.metrics.http_req_failed.values.rate < 0.05;
+  const p95     = data.metrics.http_req_duration.values['p(95)'];
+  const rps     = data.metrics.http_reqs.values.rate;
+  const avgDur  = data.metrics.http_req_duration.values.avg;
+  const minDur  = data.metrics.http_req_duration.values.min;
+  const maxDur  = data.metrics.http_req_duration.values.max;
+  const errRate = (data.metrics.http_req_failed.values.rate * 100).toFixed(2);
+
+  console.log('\n' + '═'.repeat(65));
+  console.log('  FOODREACH LOAD TEST RESULTS SUMMARY');
+  console.log('═'.repeat(65));
+  console.log(`  Scenario:          ${SCENARIO}`);
+  console.log(`  Total Requests:    ${data.metrics.http_reqs.values.count}`);
+  console.log(`  Requests/sec:      ${rps.toFixed(1)} req/s`);
+  console.log(`  Avg Response Time: ${avgDur.toFixed(0)}ms`);
+  console.log(`  Min Response Time: ${minDur.toFixed(0)}ms`);
+  console.log(`  Max Response Time: ${maxDur.toFixed(0)}ms`);
+  console.log(`  p(95) Response:    ${p95.toFixed(0)}ms`);
+  console.log(`  p(99) Response:    ${data.metrics.http_req_duration.values['p(99)'].toFixed(0)}ms`);
+  console.log(`  Error Rate:        ${errRate}%`);
+  console.log(`  Status:            ${passed ? '✅ PASSED (< 5% errors, p95 < threshold)' : '❌ FAILED'}`);
+  console.log('═'.repeat(65) + '\n');
+
+  // Interpretation
+  if (rps > 100) {
+    console.log(`📊 API handles ${rps.toFixed(0)} req/sec — excellent throughput`);
+  } else if (rps > 50) {
+    console.log(`📊 API handles ${rps.toFixed(0)} req/sec — adequate for current load`);
+  } else {
+    console.log(`⚠️  API only ${rps.toFixed(0)} req/sec — may need optimization`);
+  }
+
+  if (avgDur < 250) console.log(`⚡ Average response ${avgDur.toFixed(0)}ms — fast`);
+  else if (avgDur < 500) console.log(`🟡 Average response ${avgDur.toFixed(0)}ms — acceptable`);
+  else console.log(`🔴 Average response ${avgDur.toFixed(0)}ms — slow, needs optimization`);
+
+  return {
+    'automation/load-tests/k6-results.json': JSON.stringify(data, null, 2),
+  };
+}

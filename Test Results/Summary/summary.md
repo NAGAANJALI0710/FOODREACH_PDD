@@ -1,53 +1,52 @@
-# 🌐 Live GitHub Pages E2E Execution Summary
+# 🌐 FoodReach Live Selenium E2E Execution Summary
 
-> **Deployment URL:** [https://Anjali-0710.github.io/FoodShare/](https://Anjali-0710.github.io/FoodShare/)  
-> **Execution Target:** LIVE Deployed Application (Never localhost)  
-> **Execution Date:** Wed, 22 Jul 2026 18:23:36 GMT  
-> **Build Status:** ✅ **PASS** | **Deployment Status:** ✅ **PASS**  
+> **Build:** #local | **Date:** 20/8/2026, 1:23:07 pm | **Branch:** main
 
 ---
 
-## 📊 Live Execution Metrics
+## 📊 Execution Metrics
 
-| Metric | Value |
-|---|---|
-| **Total Test Cases** | **420** |
-| ✅ **Passed** | **420** |
-| ❌ **Failed** | **0** |
-| ⏭️ **Skipped** | **0** |
-| **Pass Percentage** | **100.00%** |
-| **Execution Target** | **LIVE GitHub Pages** |
-
----
-
-## 🏆 Top Passing Modules (100% Pass Rate)
-
-| Module Name | Total Tests | Pass Rate | Status |
-|---|---|---|---|
-| **Authentication** | 40 | 100.0% | ✅ Passed |
-| **Authorization** | 40 | 100.0% | ✅ Passed |
-| **Navigation** | 30 | 100.0% | ✅ Passed |
-| **UI Validation** | 50 | 100.0% | ✅ Passed |
-| **Forms** | 50 | 100.0% | ✅ Passed |
-| **CRUD Operations** | 50 | 100.0% | ✅ Passed |
-| **Input Validation** | 40 | 100.0% | ✅ Passed |
-| **Error Handling** | 20 | 100.0% | ✅ Passed |
-| **Session Management** | 20 | 100.0% | ✅ Passed |
-| **File Upload** | 20 | 100.0% | ✅ Passed |
-| **Accessibility** | 20 | 100.0% | ✅ Passed |
-| **Responsive Design** | 20 | 100.0% | ✅ Passed |
-| **Performance Smoke Tests** | 20 | 100.0% | ✅ Passed |
-| **Regression Suite** | 50 | 100.0% | ✅ Passed |
+| Metric             | Value             |
+|--------------------|-------------------|
+| Total Test Cases   | **470**      |
+| ✅ Passed          | **470** |
+| ❌ Failed          | **0** |
+| ⏭️ Skipped         | **0** |
+| Pass Rate          | **100.00%**  |
+| Execution Date     | 20/8/2026, 1:23:07 pm |
 
 ---
 
-## 📦 Generated Evidence Artifacts
+## 🌐 Deployment
 
-- ✓ `Automation_Test_Report.xlsx` (6-Sheet Master Workbook)
-- ✓ `Passed_Test_Cases.xlsx`
-- ✓ `Failed_Test_Cases.xlsx`
-- ✓ `Summary_Report.xlsx`
-- ✓ `execution-report.html`
-- ✓ `dashboard.html`
-- ✓ `execution-results.json`
-- ✓ `summary.md`
+| Key              | Value                                        |
+|------------------|----------------------------------------------|
+| Target URL       | https://nagaanjali0710.github.io/FOODREACH_PDD/                   |
+| Browser          | Google Chrome (Headless)                     |
+| Framework        | Selenium WebDriver 4.x + Mocha 10.x          |
+| Platform         | GitHub Actions (ubuntu-latest)               |
+
+---
+
+## ❌ FAILED TESTS (0)
+
+```
+No failures — 100% pass rate ✅
+```
+
+---
+
+## 📄 Reports Generated
+
+| Report | Path |
+|--------|------|
+| Execution Report | `Test Results/HTML/execution-report.html` |
+| Dashboard | `Test Results/HTML/dashboard.html` |
+| Full Excel Report | `Test Results/Excel/Automation_Test_Report.xlsx` |
+| Passed Tests | `Test Results/Excel/Passed_Test_Cases.xlsx` |
+| Failed Tests | `Test Results/Excel/Failed_Test_Cases.xlsx` |
+| Summary Report | `Test Results/Excel/Summary_Report.xlsx` |
+| JSON Results | `Test Results/JSON/execution-results.json` |
+
+---
+*Generated automatically by FoodReach Enterprise Selenium Automation Framework*

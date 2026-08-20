@@ -1,20 +1,31 @@
 {
   "name": "foodreach-automation",
   "version": "1.0.0",
-  "description": "FoodReach AI — Appium Android automation suite",
+  "description": "FoodReach AI — Appium Android + Selenium Web automation suite",
   "scripts": {
-    "run:appium":  "ts-node runners/runAppiumTests.ts",
-    "report:only": "ts-node -e \"const { generateSyntheticAppiumResults, generateAppiumReport } = require('./reporters/appiumExcelReporter'); generateAppiumReport(generateSyntheticAppiumResults()).catch(console.error);\"",
-    "test":        "SIMULATE_TESTS=true ts-node runners/runAppiumTests.ts"
+    "run:appium":     "ts-node runners/runTests.ts",
+    "run:selenium":   "ts-node runners/runSeleniumSuite.ts",
+    "report:only":    "SIMULATE_TESTS=true ts-node runners/runTests.ts",
+    "test":           "SIMULATE_TESTS=true ts-node runners/runTests.ts",
+    "test:selenium":  "node ../frontend/selenium-tests/run-all.js",
+    "generate:audit": "ts-node utils/generateAuditReports.ts"
   },
   "dependencies": {
-    "exceljs": "^4.4.0",
-    "webdriverio": "^8.29.0",
-    "@wdio/mocha-framework": "^8.29.0"
+    "exceljs":               "^4.4.0",
+    "fs-extra":              "^11.2.0",
+    "webdriverio":           "^8.29.0",
+    "@wdio/mocha-framework": "^8.29.0",
+    "selenium-webdriver":    "^4.20.0",
+    "mocha":                 "^10.4.0",
+    "chalk":                 "^4.1.2",
+    "dayjs":                 "^1.11.11"
   },
   "devDependencies": {
-    "typescript": "^5.4.5",
-    "ts-node": "^10.9.2",
-    "@types/node": "^20.14.0"
+    "typescript":                "^5.4.5",
+    "ts-node":                   "^10.9.2",
+    "@types/node":               "^20.14.0",
+    "@types/fs-extra":           "^11.0.4",
+    "@types/mocha":              "^10.0.6",
+    "@types/selenium-webdriver": "^4.1.26"
   }
 }
