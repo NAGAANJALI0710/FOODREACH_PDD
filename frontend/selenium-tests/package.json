@@ -1,0 +1,27 @@
+{
+  "name": "foodreach-selenium-tests",
+  "version": "2.0.0",
+  "description": "Selenium E2E tests (450 TCs) for FoodReach AI Platform — with Excel reporting",
+  "main": "run-all.js",
+  "scripts": {
+    "login":         "mocha tests/login.test.js --timeout 30000 --reporter json > results/login-raw.json; node reporter/excelReporter.js login",
+    "register":      "mocha tests/register.test.js --timeout 30000 --reporter json > results/register-raw.json; node reporter/excelReporter.js register",
+    "donor":         "mocha tests/donor.test.js --timeout 60000 --reporter json > results/donor-raw.json; node reporter/excelReporter.js donor",
+    "ngo":           "mocha tests/ngo.test.js --timeout 60000 --reporter json > results/ngo-raw.json; node reporter/excelReporter.js ngo",
+    "volunteer":     "mocha tests/volunteer.test.js --timeout 60000 --reporter json > results/volunteer-raw.json; node reporter/excelReporter.js volunteer",
+    "admin":         "mocha tests/admin.test.js --timeout 60000 --reporter json > results/admin-raw.json; node reporter/excelReporter.js admin",
+    "notifications": "mocha tests/notifications.test.js --timeout 30000 --reporter json > results/notifications-raw.json; node reporter/excelReporter.js notifications",
+    "profile":       "mocha tests/profile.test.js --timeout 30000 --reporter json > results/profile-raw.json; node reporter/excelReporter.js profile",
+    "maps":          "mocha tests/maps.test.js --timeout 30000 --reporter json > results/maps-raw.json; node reporter/excelReporter.js maps",
+    "security":      "mocha tests/security.test.js --timeout 30000 --reporter json > results/security-raw.json; node reporter/excelReporter.js security",
+    "all":           "node run-all.js",
+    "report":        "node reporter/excelReporter.js all"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.4.0",
+    "selenium-webdriver": "^4.20.0"
+  }
+}

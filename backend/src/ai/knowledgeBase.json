@@ -1,0 +1,331 @@
+{
+  "food_donation": {
+    "category": "Food Donation",
+    "faqs": [
+      {
+        "question": "What food are accepted?",
+        "patterns": [
+          "What food are accepted?",
+          "What foods can I donate?",
+          "Which food can I donate?",
+          "What type of food does FoodReach accept?",
+          "What items can I donate?",
+          "What food is allowed?"
+        ],
+        "answer": "FoodReach accepts suitable surplus food such as cooked meals, fresh fruits and vegetables, bakery items, packaged food, and groceries. All donated food must be fresh, safe, and suitable for consumption."
+      },
+      {
+        "question": "Can I donate cooked food?",
+        "patterns": [
+          "Can I donate cooked food?",
+          "Is cooked food accepted?",
+          "Can I share cooked meals?",
+          "Can I donate hot food?",
+          "can we give warm cooked food?",
+          "can I donate warm cooked food?"
+        ],
+        "answer": "Yes! Cooked food can be donated provided it is fresh, safely prepared, stored in clean sealed containers, and donated within 4 to 6 hours of preparation."
+      },
+      {
+        "question": "Can I donate vegetables?",
+        "patterns": [
+          "Can I donate vegetables?",
+          "Can I donate raw vegetables?",
+          "Are fresh vegetables accepted?"
+        ],
+        "answer": "Yes! Fresh, unspotted raw vegetables and farm produce are accepted for donation."
+      },
+      {
+        "question": "Can I donate fruits?",
+        "patterns": [
+          "Can I donate fruits?",
+          "Can I donate fresh fruit?",
+          "Are fruits accepted?"
+        ],
+        "answer": "Yes! Fresh, wholesome fruits can be donated through FoodReach."
+      },
+      {
+        "question": "Can I donate expired food?",
+        "patterns": [
+          "Can I donate expired food?",
+          "Is expired food accepted?",
+          "Can I donate stale food?",
+          "What about expired items?",
+          "are stale items accepted?",
+          "stale food",
+          "spoiled food"
+        ],
+        "answer": "No. Expired, spoiled, or unsafe food is strictly prohibited from donation to ensure food safety and community health."
+      },
+      {
+        "question": "How do I donate food?",
+        "patterns": [
+          "How do I donate food?",
+          "How to create a food donation?",
+          "How to list surplus food?",
+          "What is the donation process?",
+          "what is the process for food donation?"
+        ],
+        "answer": "To donate food, open the 'Create Donation' screen from your Donor Dashboard, enter the food details (type, quantity, shelf life, and pickup address), and tap 'List Food Donation'."
+      }
+    ]
+  },
+  "ngo": {
+    "category": "NGO Operations",
+    "faqs": [
+      {
+        "question": "How do NGOs work?",
+        "patterns": [
+          "How do NGOs work?",
+          "What do NGOs do on FoodReach?",
+          "How does an NGO claim food?"
+        ],
+        "answer": "NGOs on FoodReach browse nearby surplus food listings on their dashboard map, claim available donations, and coordinate pickup to distribute food to community shelters and people in need."
+      },
+      {
+        "question": "How can an NGO register?",
+        "patterns": [
+          "How can an NGO register?",
+          "How to register as an NGO?",
+          "How do I sign up my organization?",
+          "NGO registration process"
+        ],
+        "answer": "NGOs can register by tapping 'Create Account' on the Sign Up screen, selecting the 'NGO' role, submitting organization details, serving capacity, and marking their location on the map."
+      }
+    ]
+  },
+  "ngo_registration": {
+    "category": "NGO Registration",
+    "faqs": [
+      {
+        "question": "How can an NGO register?",
+        "patterns": [
+          "How can an NGO register?",
+          "How to register as an NGO?",
+          "How do I sign up my organization?",
+          "NGO registration process",
+          "how to register ngo"
+        ],
+        "answer": "NGOs can register by tapping 'Create Account' on the Sign Up screen, selecting the 'NGO' role, submitting organization details, serving capacity, and marking their location on the map."
+      }
+    ]
+  },
+  "volunteer": {
+    "category": "Volunteer Operations",
+    "faqs": [
+      {
+        "question": "How can I become a volunteer?",
+        "patterns": [
+          "How can I become a volunteer?",
+          "How to register as a volunteer?",
+          "How do volunteers work?",
+          "Volunteer sign up"
+        ],
+        "answer": "You can become a volunteer by registering with the 'Volunteer' role on FoodReach. Volunteers accept pickup assignments, collect food from donors, verify pickup codes, and deliver meals to assigned NGO shelters."
+      }
+    ]
+  },
+  "food_safety": {
+    "category": "Food Safety",
+    "faqs": [
+      {
+        "question": "What are the food safety guidelines?",
+        "patterns": [
+          "What are the food safety guidelines?",
+          "How is food safety maintained?",
+          "What is Freshness Score?",
+          "Food safety rules"
+        ],
+        "answer": "Food safety is maintained through mandatory Freshness Scoring, clean container packaging, temperature control, and fast 6-digit pickup verification. Food showing signs of spoilage is strictly rejected."
+      }
+    ]
+  },
+  "app_usage": {
+    "category": "App Usage",
+    "faqs": [
+      {
+        "question": "How do I use the FoodReach app?",
+        "patterns": [
+          "How do I use the FoodReach app?",
+          "What features are available in the app?",
+          "How does FoodReach work?"
+        ],
+        "answer": "FoodReach connects Donors, NGOs, and Volunteers. You can list food, track live GPS deliveries, verify pickups with 6-digit codes, view impact stats, and receive role-based notifications."
+      }
+    ]
+  },
+  "login": {
+    "category": "Account Login",
+    "faqs": [
+      {
+        "question": "How do I log in?",
+        "patterns": [
+          "How do I log in?",
+          "How to sign in to my account?",
+          "Login process"
+        ],
+        "answer": "To log in, tap 'Sign In' on the welcome screen, enter your registered email address and password, and tap Login to access your personalized dashboard."
+      }
+    ]
+  },
+  "signup": {
+    "category": "Account Registration",
+    "faqs": [
+      {
+        "question": "How do I sign up?",
+        "patterns": [
+          "How do I sign up?",
+          "How to create an account?",
+          "Registration process"
+        ],
+        "answer": "To create an account, tap 'Create Account' on the Sign In screen, select your role (Donor, NGO, or Volunteer), fill in your details and address, and submit the form."
+      }
+    ]
+  },
+  "forgot_password": {
+    "category": "Forgot Password",
+    "faqs": [
+      {
+        "question": "How do I reset my password?",
+        "patterns": [
+          "How do I reset my password?",
+          "Forgot password?",
+          "How to recover password?"
+        ],
+        "answer": "Click 'Forgot Password?' on the Login screen, enter your registered email address, and follow the instructions or enter the reset code sent to your email."
+      }
+    ]
+  },
+  "donation_status": {
+    "category": "Donation Tracking",
+    "faqs": [
+      {
+        "question": "How do I track my donation?",
+        "patterns": [
+          "How do I track my donation?",
+          "What is my donation status?",
+          "What happens after my donation is accepted?",
+          "How to view status?",
+          "what happens once my donation is claimed?",
+          "what happens after my donation is claimed?"
+        ],
+        "answer": "After an NGO claims your donation, the status updates to 'Accepted'. You can track progress on the 'Track Donation' screen as a volunteer is assigned, picks up the food ('Picked Up'), and completes delivery ('Completed')."
+      }
+    ]
+  },
+  "pickup_process": {
+    "category": "Pickup Process",
+    "faqs": [
+      {
+        "question": "How does the pickup process work?",
+        "patterns": [
+          "How does the pickup process work?",
+          "Who picks up the food?",
+          "How is pickup verified?"
+        ],
+        "answer": "Once a donation is claimed, a nearby volunteer is assigned. The volunteer travels to the donor address, verifies the mandatory 6-digit pickup code with the donor, picks up the food, and delivers it to the NGO."
+      }
+    ]
+  },
+  "notifications": {
+    "category": "Notifications",
+    "faqs": [
+      {
+        "question": "How do notifications work?",
+        "patterns": [
+          "How do notifications work?",
+          "Where do I find my notifications?",
+          "Why do I get notifications?"
+        ],
+        "answer": "Tap the bell icon in the top header to open your Notification Center. You will receive real-time updates when your donation is claimed, a volunteer is assigned, or a pickup is verified."
+      }
+    ]
+  },
+  "profile": {
+    "category": "Profile & Settings",
+    "faqs": [
+      {
+        "question": "How do I update my profile?",
+        "patterns": [
+          "How do I update my profile?",
+          "How to edit my profile details?",
+          "How to change my address or phone number?",
+          "how do I edit contact details?",
+          "edit contact details",
+          "update my contact information"
+        ],
+        "answer": "Open the Profile screen from the top navigation bar or menu, edit your name, contact number, or address, and tap 'Save Profile'."
+      },
+      {
+        "question": "How do I change my password?",
+        "patterns": [
+          "How do I change my password?",
+          "How to update account password?",
+          "Change password in settings"
+        ],
+        "answer": "Go to your Profile screen, scroll to the Account Security section, tap 'Change Password', enter your current password and new password, and save changes."
+      }
+    ]
+  },
+  "contact_support": {
+    "category": "Contact Support",
+    "faqs": [
+      {
+        "question": "How do I contact support?",
+        "patterns": [
+          "How do I contact support?",
+          "How to get help?",
+          "Customer support phone number"
+        ],
+        "answer": "You can contact FoodReach support by emailing support@foodreach.org or calling our helpline at +91 98765 43210. Our team is available 24/7."
+      }
+    ]
+  },
+  "general_greeting": {
+    "category": "Greeting",
+    "faqs": [
+      {
+        "question": "Hello",
+        "patterns": [
+          "Hello",
+          "Hi",
+          "Hey",
+          "Greetings",
+          "Good morning",
+          "Good evening"
+        ],
+        "answer": "Hello! Welcome to FoodReach Assistant. How can I help you with food donations, NGOs, volunteers, food safety, or tracking today?"
+      }
+    ]
+  },
+  "thanks": {
+    "category": "Gratitude",
+    "faqs": [
+      {
+        "question": "Thank you",
+        "patterns": [
+          "Thank you",
+          "Thanks",
+          "Appreciate it",
+          "Thank you so much"
+        ],
+        "answer": "You are very welcome! Thank you for being a part of the FoodReach food rescue community."
+      }
+    ]
+  },
+  "goodbye": {
+    "category": "Farewell",
+    "faqs": [
+      {
+        "question": "Goodbye",
+        "patterns": [
+          "Goodbye",
+          "Bye",
+          "See you",
+          "Farewell"
+        ],
+        "answer": "Goodbye! Have a wonderful day, and thank you for making an impact with FoodReach."
+      }
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+-- Deleted: live_tracking table is no longer used. See 20260726000000_donations_live_tracking.sql instead.

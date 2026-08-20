@@ -1,0 +1,122 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  role: 'donor' | 'ngo' | 'admin';
+  contactNumber: string;
+  address?: string;
+  status?: string;
+  isActive?: boolean;
+  gpsLocation?: {
+    latitude: number;
+    longitude: number;
+  };
+  ngoCapacity?: number;
+  foodTypePreference?: string[];
+  completedPickups?: number;
+}
+
+interface AuthState {
+  token: string | null;
+  user: UserProfile | null;
+  isAuthenticated: boolean;
+  themeMode: 'light' | 'dark';
+}
+
+const getInitialThemeMode = (): 'light' | 'dark' => {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const saved = window.localStorage.getItem('fs_theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+  }
+  return 'light';
+};
+
+const initialState: AuthState = {
+  token: null,
+  user: null,
+  isAuthenticated: false,
+  themeMode: getInitialThemeMode(),
+};
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    setCredentials: (
+      state,
+      action: PayloadAction<{ user: UserProfile; token: string; rememberMe?: boolean }>
+    ) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      state.isAuthenticated = true;
+      
+      const remember = action.payload.rememberMe ?? true; // Default to true if not specified
+      
+      if (typeof window !== 'undefined') {
+        if (remember) {
+          if (window.localStorage) {
+            window.localStorage.setItem('fs_token', action.payload.token);
+            window.localStorage.setItem('fs_user', JSON.stringify(action.payload.user));
+            window.localStorage.setItem('fs_remember', 'true');
+          }
+          if (window.sessionStorage) {
+            window.sessionStorage.removeItem('fs_token');
+            window.sessionStorage.removeItem('fs_user');
+          }
+        } else {
+          if (window.sessionStorage) {
+            window.sessionStorage.setItem('fs_token', action.payload.token);
+            window.sessionStorage.setItem('fs_user', JSON.stringify(action.payload.user));
+          }
+          if (window.localStorage) {
+            window.localStorage.removeItem('fs_token');
+            window.localStorage.removeItem('fs_user');
+            window.localStorage.setItem('fs_remember', 'false');
+          }
+        }
+      }
+    },
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
+      if (typeof window !== 'undefined') {
+        if (window.localStorage) {
+          window.localStorage.removeItem('fs_token');
+          window.localStorage.removeItem('fs_user');
+          window.localStorage.removeItem('fs_remember');
+        }
+        if (window.sessionStorage) {
+          window.sessionStorage.setItem('fs_token', ''); // Clear session values
+          window.sessionStorage.setItem('fs_user', '');
+          window.sessionStorage.removeItem('fs_token');
+          window.sessionStorage.removeItem('fs_user');
+        }
+      }
+    },
+    toggleTheme: (state) => {
+      state.themeMode = state.themeMode === 'light' ? 'dark' : 'light';
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem('fs_theme', state.themeMode);
+      }
+    },
+    updateProfile: (state, action: PayloadAction<Partial<UserProfile>>) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+        if (typeof window !== 'undefined') {
+          if (window.localStorage && window.localStorage.getItem('fs_user')) {
+            window.localStorage.setItem('fs_user', JSON.stringify(state.user));
+          }
+          if (window.sessionStorage && window.sessionStorage.getItem('fs_user')) {
+            window.sessionStorage.setItem('fs_user', JSON.stringify(state.user));
+          }
+        }
+      }
+    }
+  },
+});
+
+export const { setCredentials, logout, toggleTheme, updateProfile } = authSlice.actions;
+export default authSlice.reducer;
