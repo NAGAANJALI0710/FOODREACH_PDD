@@ -1,4 +1,4 @@
-# FoodShare AI Platform 🌍🍲
+# FoodReach AI Platform 🌍🍲
 
 FoodShare AI is a comprehensive, production-grade web and mobile platform designed to bridge the gap between surplus food donors (restaurants, caterers, grocery stores) and NGOs/beneficiaries. The platform integrates **AI-driven freshness evaluation, smart geographical proximity matching, real-time delivery tracking, and administrative moderation panels**.
 
