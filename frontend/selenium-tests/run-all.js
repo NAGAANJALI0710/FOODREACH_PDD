@@ -10,10 +10,21 @@ const { execSync, spawnSync } = require('child_process');
 const fs   = require('fs');
 const path = require('path');
 
-const RESULTS_DIR = path.join(__dirname, 'results');
-const REPORTS_DIR = path.join(__dirname, 'reports');
+const __rootDir  = __dirname;
+const RESULTS_DIR = path.join(__rootDir, 'results');
+const REPORTS_DIR = path.join(__rootDir, 'reports');
 
-[RESULTS_DIR, REPORTS_DIR].forEach(d => { if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); });
+// "Test Results/" lives two levels up from frontend/selenium-tests/
+const TR_ROOT       = path.join(__rootDir, '..', '..', 'Test Results');
+const TR_EXCEL_DIR  = path.join(TR_ROOT, 'Excel');
+const TR_HTML_DIR   = path.join(TR_ROOT, 'HTML');
+const TR_JSON_DIR   = path.join(TR_ROOT, 'JSON');
+const TR_SUMMARY    = path.join(TR_ROOT, 'Summary');
+const TR_SS_DIR     = path.join(TR_ROOT, 'Screenshots');
+const TR_LOGS_DIR   = path.join(TR_ROOT, 'Logs');
+
+[RESULTS_DIR, REPORTS_DIR, TR_EXCEL_DIR, TR_HTML_DIR, TR_JSON_DIR, TR_SUMMARY, TR_SS_DIR, TR_LOGS_DIR]
+  .forEach(d => { if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); });
 
 const SUITES = [
   { name: 'login',         file: 'tests/login.test.js',         timeout: 30000, count: 50 },
@@ -104,8 +115,8 @@ async function runSuites() {
   console.log(`  ⏱  Total Time     : ${(totalElapsed / 1000).toFixed(1)}s`);
   console.log('═══════════════════════════════════════════════════════════════════\n');
 
-  // Generate Excel report
-  console.log('📄 Generating Excel report...');
+  // ── Generate Excel reports (4 workbooks in Test Results/Excel/) ──────────
+  console.log('📊 Generating Excel reports...');
   try {
     spawnSync('node', ['reporter/excelReporter.js', 'all'], {
       cwd: __dirname,
@@ -116,10 +127,44 @@ async function runSuites() {
     console.error('Excel generation error (non-fatal):', e.message);
   }
 
-  // Write JSON summary
+  // ── Generate HTML reports (Test Results/HTML/) ───────────────────────────
+  console.log('🖥️  Generating HTML reports...');
+  try {
+    spawnSync('node', ['reporter/htmlReporter.js'], {
+      cwd: __dirname,
+      stdio: 'inherit',
+      shell: true,
+    });
+  } catch (e) {
+    console.error('HTML generation error (non-fatal):', e.message);
+  }
+
+  // ── Write JSON execution results ─────────────────────────────────────────
+  const jsonResult = {
+    buildNumber:   process.env.GITHUB_RUN_NUMBER || 'local',
+    executionDate: new Date().toISOString(),
+    targetUrl:     process.env.BASE_URL || 'https://nagaanjali0710.github.io/FOODREACH_PDD/',
+    browser:       'Google Chrome Headless',
+    framework:     'Selenium WebDriver 4.x + Mocha 10.x',
+    summary: {
+      total:     summary.total,
+      passed:    summary.passed,
+      failed:    summary.failed,
+      passRate:  `${passRate}%`,
+      durationMs: totalElapsed,
+    },
+    suites: summary.suites
+  };
+  const jsonPath = path.join(TR_JSON_DIR, 'execution-results.json');
+  fs.writeFileSync(jsonPath, JSON.stringify(jsonResult, null, 2));
+  console.log(`✅ JSON results: ${jsonPath}`);
+
+  // ── Write internal summary.json ───────────────────────────────────────────
   const summaryPath = path.join(RESULTS_DIR, 'summary.json');
   fs.writeFileSync(summaryPath, JSON.stringify({ ...summary, passRate, totalElapsed }, null, 2));
-  console.log(`✅ Summary saved to: ${summaryPath}`);
+  console.log(`✅ Internal summary: ${summaryPath}`);
+
+  console.log(`\n✅ All reports generated in: ${TR_ROOT}\n`);
 
   if (summary.failed > 0) {
     process.exit(1);

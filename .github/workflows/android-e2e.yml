@@ -125,7 +125,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
-          cache-dependency-path: automation/package-lock.json
+          cache-dependency-path: automation/package.json
 
       - name: "Stage 4a — Install Automation Framework Dependencies"
         working-directory: automation
@@ -255,16 +255,15 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: "foodreach-e2e-test-results-build-${{ github.run_number }}"
+          name: "foodreach-appium-results-build-${{ github.run_number }}"
           retention-days: 30
           path: |
             automation/reports/Excel/Automation_Test_Report.xlsx
             automation/reports/Excel/Passed_Test_Cases.xlsx
             automation/reports/Excel/Failed_Test_Cases.xlsx
-            automation/reports/Excel/Execution_Summary.xlsx
+            automation/reports/Excel/Summary_Report.xlsx
             automation/reports/HTML/execution-report.html
             automation/reports/HTML/dashboard.html
-            automation/reports/HTML/trends.html
             automation/reports/JSON/execution-results.json
             automation/reports/Summary/summary.md
             automation/screenshots/
