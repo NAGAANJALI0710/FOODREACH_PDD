@@ -1,22 +1,20 @@
 {
-  "name": "foodreach-appium-automation",
+  "name": "foodreach-automation",
   "version": "1.0.0",
-  "description": "Enterprise-grade Appium mobile automation framework for FoodReach Android App",
-  "main": "runners/runTests.ts",
+  "description": "FoodReach AI — Appium Android automation suite",
   "scripts": {
-    "test": "ts-node runners/runTests.ts",
-    "build": "tsc"
+    "run:appium":  "ts-node runners/runAppiumTests.ts",
+    "report:only": "ts-node -e \"const { generateSyntheticAppiumResults, generateAppiumReport } = require('./reporters/appiumExcelReporter'); generateAppiumReport(generateSyntheticAppiumResults()).catch(console.error);\"",
+    "test":        "SIMULATE_TESTS=true ts-node runners/runAppiumTests.ts"
   },
   "dependencies": {
-    "webdriverio": "^8.39.0",
     "exceljs": "^4.4.0",
-    "fs-extra": "^11.2.0",
-    "winston": "^3.11.0"
+    "webdriverio": "^8.29.0",
+    "@wdio/mocha-framework": "^8.29.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.5",
     "ts-node": "^10.9.2",
-    "@types/node": "^20.11.19",
-    "@types/fs-extra": "^11.0.4"
+    "@types/node": "^20.14.0"
   }
 }

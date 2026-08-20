@@ -1,0 +1,17 @@
+{
+  "name": "foodreach-test-scripts",
+  "version": "1.0.0",
+  "description": "FoodReach AI — Test scripts (API, Validation, Deployment, Vulnerability, Full E2E)",
+  "scripts": {
+    "unit-api":      "node unit-api-tests.js",
+    "validation":    "node validation-tests.js",
+    "deployment":    "node deployment-tests.js",
+    "vulnerability": "node vulnerability-tests.js",
+    "full-e2e":      "node full-e2e-tests.js",
+    "master-report": "node compile-master-report.js",
+    "all":           "npm run unit-api && npm run validation && npm run deployment && npm run vulnerability && npm run full-e2e && npm run master-report"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}
