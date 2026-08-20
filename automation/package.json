@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "FoodReach AI — Appium Android + Selenium Web automation suite",
   "scripts": {
-    "run:appium":     "ts-node runners/runTests.ts",
+    "run:appium":     "ts-node runners/runAppiumTests.ts",
     "run:selenium":   "ts-node runners/runSeleniumSuite.ts",
-    "report:only":    "SIMULATE_TESTS=true ts-node runners/runTests.ts",
-    "test":           "SIMULATE_TESTS=true ts-node runners/runTests.ts",
+    "report:only":    "ts-node runners/runAppiumTests.ts",
+    "test":           "ts-node runners/runAppiumTests.ts",
     "test:selenium":  "node ../frontend/selenium-tests/run-all.js",
     "generate:audit": "ts-node utils/generateAuditReports.ts"
   },

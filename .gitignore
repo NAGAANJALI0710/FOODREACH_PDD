@@ -3,8 +3,16 @@ dist/
 web-build/
 .expo/
 .env
+.env.*
+!.env.example
 *.log
 .system_generated/
 .tempmediaStorage/
 *.local
 backend/uploads/
+reports/
+master-report/
+frontend/selenium-tests/results/
+frontend/selenium-tests/reports/
+.idea/
+.vscode/
