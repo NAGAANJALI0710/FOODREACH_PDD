@@ -1,6 +1,6 @@
 # 🌐 FoodReach Live Selenium E2E Execution Summary
 
-> **Build:** #local | **Date:** 20/8/2026, 1:23:07 pm | **Branch:** main
+> **Build:** #local | **Date:** 20/8/2026, 2:00:25 pm | **Branch:** main
 
 ---
 
@@ -8,12 +8,12 @@
 
 | Metric             | Value             |
 |--------------------|-------------------|
-| Total Test Cases   | **470**      |
-| ✅ Passed          | **470** |
-| ❌ Failed          | **0** |
+| Total Test Cases   | **313**      |
+| ✅ Passed          | **310** |
+| ❌ Failed          | **3** |
 | ⏭️ Skipped         | **0** |
-| Pass Rate          | **100.00%**  |
-| Execution Date     | 20/8/2026, 1:23:07 pm |
+| Pass Rate          | **99.04%**  |
+| Execution Date     | 20/8/2026, 2:00:25 pm |
 
 ---
 
@@ -28,10 +28,20 @@
 
 ---
 
-## ❌ FAILED TESTS (0)
+## ❌ FAILED TESTS (3)
 
 ```
-No failures — 100% pass rate ✅
+✗ FoodReach — Login Screen E2E (50 TCs) "before all" hook for "TC-SEL-LOGIN-001 — FoodReach — Login Screen E2E (50 TCs) "before all" hook for 
+  Reason: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=151.0.7922.140)
+
+✗ FoodReach — Register Screen E2E (50 TCs) "before all" hook for "TC-SEL-REG-001 — FoodReach — Register Screen E2E (50 TCs) "before all" hook f
+  Reason: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=151.0.7922.140)
+
+✗ FoodReach — Donor Flow E2E (60 TCs) "before all" hook for "TC-SEL-DONOR-001 — FoodReach — Donor Flow E2E (60 TCs) "before all" hook for "T
+  Reason: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=151.0.7922.140)
 ```
 
 ---

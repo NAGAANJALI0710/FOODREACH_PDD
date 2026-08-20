@@ -3,7 +3,7 @@
 // TC-APPM-AUTH-001 to TC-APPM-AUTH-050
 // Runs in simulation mode by default (SIMULATE_TESTS=true)
 // ─────────────────────────────────────────────────────────────────────────────
-import { TestCase } from '../reporters/appiumExcelReporter';
+import { TestCase } from '../../reporters/appiumExcelReporter';
 
 const SIMULATE = process.env.SIMULATE_TESTS !== 'false';
 const DEVICE   = 'Android 13 (API 33) — Pixel 6';

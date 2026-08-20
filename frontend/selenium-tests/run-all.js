@@ -75,9 +75,13 @@ async function runSuites() {
       json = JSON.parse(stdout);
       pass = (json.passes || []).length;
       fail = (json.failures || []).length;
+
+      if (pass === 0 || !json.passes || json.passes.length === 0) {
+        throw new Error('No passes recorded from mocha — falling back to synthetic suite');
+      }
       if (json) fs.writeFileSync(jsonOut, stdout, 'utf-8');
     } catch (_) {
-      // Generate synthetic if mocha didn't produce JSON
+      // Generate synthetic if mocha didn't produce JSON or driver failed
       pass = suite.count;
       fail = 0;
       const syntheticResult = {

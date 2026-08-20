@@ -35,7 +35,7 @@
 <body>
 <div class="header">
   <h1>🍱 FoodReach — E2E Test Dashboard</h1>
-  <p>Build #local &bull; 20/8/2026, 1:23:07 pm &bull; Live GitHub Pages Testing</p>
+  <p>Build #local &bull; 20/8/2026, 2:00:25 pm &bull; Live GitHub Pages Testing</p>
 </div>
 <div class="container">
   <div class="url-bar">
@@ -44,11 +44,11 @@
     <span style="margin-left:20px">📦 Build:</span> #local
   </div>
   <div class="kpi-grid">
-    <div class="kpi blue"><div class="v">470</div><div class="l">Total Tests</div></div>
-    <div class="kpi green"><div class="v">470</div><div class="l">Passed</div></div>
-    <div class="kpi red"><div class="v">0</div><div class="l">Failed</div></div>
+    <div class="kpi blue"><div class="v">313</div><div class="l">Total Tests</div></div>
+    <div class="kpi green"><div class="v">310</div><div class="l">Passed</div></div>
+    <div class="kpi red"><div class="v">3</div><div class="l">Failed</div></div>
     <div class="kpi yellow"><div class="v">0</div><div class="l">Skipped</div></div>
-    <div class="kpi purple"><div class="v">100.00%</div><div class="l">Pass Rate</div></div>
+    <div class="kpi purple"><div class="v">99.04%</div><div class="l">Pass Rate</div></div>
   </div>
   <div class="charts-grid">
     <div class="chart-card">
@@ -72,14 +72,14 @@ new Chart(pieCtx, {
   type: 'doughnut',
   data: {
     labels: ['Passed','Failed','Skipped'],
-    datasets:[{data:[470,0,0],backgroundColor:['#22c55e','#ef4444','#f59e0b'],borderWidth:0}]
+    datasets:[{data:[310,3,0],backgroundColor:['#22c55e','#ef4444','#f59e0b'],borderWidth:0}]
   },
   options:{plugins:{legend:{labels:{color:'#e2e8f0'}}},cutout:'65%'}
 });
 const barCtx = document.getElementById('barChart').getContext('2d');
 const labels = ["Authentication","Registration","Donor Management","NGO Management","Admin Operations","Volunteer Management","Notifications","Profile Management","Maps & Location","Security"];
-const passedData = [50,50,60,60,60,50,40,40,30,30];
-const failedData = [0,0,0,0,0,0,0,0,0,0];
+const passedData = [0,0,0,60,60,50,40,40,30,30];
+const failedData = [1,1,1,0,0,0,0,0,0,0];
 new Chart(barCtx, {
   type: 'bar',
   data: {

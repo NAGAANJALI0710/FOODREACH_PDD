@@ -2,7 +2,7 @@
 // FoodReach AI — Appium Android: Admin Tests (60 Test Cases)
 // TC-APPM-ADMIN-001 to TC-APPM-ADMIN-060
 // ─────────────────────────────────────────────────────────────────────────────
-import { TestCase } from '../reporters/appiumExcelReporter';
+import { TestCase } from '../../reporters/appiumExcelReporter';
 
 const SIMULATE = process.env.SIMULATE_TESTS !== 'false';
 const DEVICE   = 'Android 13 (API 33) — Pixel 6';

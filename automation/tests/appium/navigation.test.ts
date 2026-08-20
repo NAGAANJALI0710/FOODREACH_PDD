@@ -2,7 +2,7 @@
 // FoodReach AI — Appium Android: Navigation Tests (40 TCs)
 // TC-APPM-NAV-001 to TC-APPM-NAV-040
 // ─────────────────────────────────────────────────────────────────────────────
-import { TestCase } from '../reporters/appiumExcelReporter';
+import { TestCase } from '../../reporters/appiumExcelReporter';
 const DEVICE = 'Android 13 (API 33) — Pixel 6';
 const APP_VER = '1.0.0';
 function makeTC(id: string, title: string, status: 'PASS'|'FAIL'|'SKIP' = 'PASS', error = ''): TestCase {
