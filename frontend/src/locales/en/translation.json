@@ -1,0 +1,118 @@
+{
+  "common": {
+    "appName": "FoodReach AI",
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saveChanges": "Save Changes",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "loading": "Loading...",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "yes": "Yes",
+    "no": "No",
+    "back": "Back",
+    "close": "Close",
+    "submit": "Submit"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "createDonation": "Create Donation",
+    "trackDonations": "Track Deliveries",
+    "browseDonations": "Browse Donations",
+    "myRequests": "My Requests",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "settings": "Settings",
+    "history": "History",
+    "volunteers": "Volunteers",
+    "logout": "Sign Out"
+  },
+  "auth": {
+    "login": "Sign In",
+    "register": "Create Account",
+    "forgotPassword": "Forgot Password?",
+    "email": "Email Address",
+    "password": "Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm New Password",
+    "changePassword": "Change Password",
+    "fullName": "Full Name",
+    "contactNumber": "Contact Number",
+    "address": "Address",
+    "role": "Role",
+    "donor": "Food Donor",
+    "ngo": "NGO Partner",
+    "admin": "Administrator",
+    "invalidEmail": "Please enter a valid email address.",
+    "passwordTooShort": "Password is too weak. Must be at least 6 characters.",
+    "passwordsDoNotMatch": "New passwords do not match.",
+    "passwordUpdatedSuccess": "Password updated successfully."
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "activeDonations": "Active Food Offers",
+    "quickActions": "Quick Actions",
+    "recentActivity": "Recent Activity",
+    "stats": "Analytics & Impact",
+    "totalDonated": "Total Food Saved",
+    "mealsServed": "Meals Distributed",
+    "peopleHelped": "People Reached"
+  },
+  "donation": {
+    "createTitle": "List Surplus Food",
+    "foodType": "Food Category",
+    "quantity": "Quantity",
+    "unit": "Unit",
+    "bestBefore": "Shelf Life (Hours)",
+    "prepTime": "Prepared (Hours Ago)",
+    "temperature": "Storage Temp (°C)",
+    "pickupAddress": "Pickup Address",
+    "freshnessScore": "AI Freshness Score",
+    "submitDonation": "Publish Donation Offer",
+    "createdSuccess": "Donation listed successfully!",
+    "noDonations": "No donations available.",
+    "status": "Current Status"
+  },
+  "status": {
+    "pending": "Pending",
+    "available": "Available",
+    "accepted": "Accepted",
+    "assigned": "Assigned",
+    "pickupStarted": "Pickup Started",
+    "pickedUp": "Picked Up",
+    "delivered": "Delivered",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark All as Read",
+    "noNotifications": "No notifications yet.",
+    "unread": "Unread"
+  },
+  "profile": {
+    "myProfile": "My Profile",
+    "personalInfo": "Personal Information",
+    "accountSecurity": "Account Security",
+    "accountRole": "Account Role",
+    "verified": "Verified"
+  },
+  "settings": {
+    "settingsTitle": "Settings & Preferences",
+    "language": "Language",
+    "currentLanguage": "Current Language",
+    "selectLanguage": "Select Preferred Language",
+    "theme": "App Theme",
+    "darkMode": "Dark Mode"
+  },
+  "chatbot": {
+    "title": "FoodReach AI Assistant",
+    "placeholder": "Ask AI assistant anything...",
+    "suggestions": "Quick Prompts"
+  }
+}

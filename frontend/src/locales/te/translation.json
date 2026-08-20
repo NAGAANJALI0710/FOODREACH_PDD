@@ -1,0 +1,118 @@
+{
+  "common": {
+    "appName": "ఫుడ్ రీచ్ AI",
+    "ok": "సరే",
+    "cancel": "రద్దు చేయి",
+    "save": "సేవ్ చేయి",
+    "saveChanges": "మార్పులను సేవ్ చేయి",
+    "edit": "సవరించు",
+    "delete": "తొలగించు",
+    "search": "శోధించండి",
+    "loading": "లోడ్ అవుతోంది...",
+    "success": "విజయం",
+    "error": "లోపం",
+    "warning": "హెచ్చరిక",
+    "yes": "అవును",
+    "no": "కాదు",
+    "back": "వెనుకకు",
+    "close": "మూసివేయి",
+    "submit": "సమర్పించు"
+  },
+  "nav": {
+    "dashboard": "డాష్‌బోర్డ్",
+    "createDonation": "విరాళం ఇవ్వండి",
+    "trackDonations": "డెలివరీలను ట్రాక్ చేయండి",
+    "browseDonations": "విరాళాలు బ్రౌజ్ చేయండి",
+    "myRequests": "నా అభ్యర్థనలు",
+    "notifications": "నోటిఫికేషన్లు",
+    "profile": "ప్రొఫైల్",
+    "settings": "సెట్టింగ్‌లు",
+    "history": "చరిత్ర",
+    "volunteers": "వాలంటీర్లు",
+    "logout": "సైన్ అవుట్"
+  },
+  "auth": {
+    "login": "సైన్ ఇన్",
+    "register": "ఖాతా సృష్టించండి",
+    "forgotPassword": "పాస్‌వర్డ్ మరచిపోయారా?",
+    "email": "ఇమెయిల్ చిరునామా",
+    "password": "పాస్‌వర్డ్",
+    "currentPassword": "ప్రస్తుత పాస్‌వర్డ్",
+    "newPassword": "కొత్త పాస్‌వర్డ్",
+    "confirmPassword": "కొత్త పాస్‌వర్డ్‌ను నిర్ధారించండి",
+    "changePassword": "పాస్‌వర్డ్ మార్చండి",
+    "fullName": "పూర్తి పేరు",
+    "contactNumber": "సంప్రదింపు సంఖ్య",
+    "address": "చిరునామా",
+    "role": "పాత్ర",
+    "donor": "ఆహార దాత",
+    "ngo": "NGO భాగస్వామి",
+    "admin": "అడ్మినిస్ట్రేటర్",
+    "invalidEmail": "దయచేసి చెల్లుబాటు అయ్యే ఇమెయిల్ ఇవ్వండి.",
+    "passwordTooShort": "పాస్‌వర్డ్ కనీసం 6 అక్షరాలు ఉండాలి.",
+    "passwordsDoNotMatch": "కొత్త పాస్‌వర్డ్‌లు సరిపోలడం లేదు.",
+    "passwordUpdatedSuccess": "పాస్‌వర్డ్ విజయవంతంగా నవీకరించబడింది."
+  },
+  "dashboard": {
+    "welcome": "స్వాగతం",
+    "activeDonations": "సక్రియ ఆహార ఆఫర్‌లు",
+    "quickActions": "త్వరిత చర్యలు",
+    "recentActivity": "ఇటీవలి కార్యాచరణ",
+    "stats": "విశ్లేషణ మరియు ప్రభావం",
+    "totalDonated": "మొత్తం సేవ్ చేసిన ఆహారం",
+    "mealsServed": "పంపిణీ చేసిన భోజనాలు",
+    "peopleHelped": "చేరిన ప్రజలు"
+  },
+  "donation": {
+    "createTitle": "మిగులు ఆహారాన్ని జాబితా చేయండి",
+    "foodType": "ఆహార వర్గం",
+    "quantity": "పరిమాణం",
+    "unit": "యూనిట్",
+    "bestBefore": "చెల్లుబాటు కాలం (గంటలు)",
+    "prepTime": "తయారుచేసిన సమయం (గంటల క్రితం)",
+    "temperature": "నిల్వ ఉష్ణోగ్రత (°C)",
+    "pickupAddress": "పికప్ చిరునామా",
+    "freshnessScore": "AI తాజాదనం స్కోర్",
+    "submitDonation": "విరాళం ఆఫర్‌ను ప్రచురించండి",
+    "createdSuccess": "విరాళం విజయవంతంగా జాబితా చేయబడింది!",
+    "noDonations": "విరాళాలు అందుబాటులో లేవు.",
+    "status": "ప్రస్తుత స్థితి"
+  },
+  "status": {
+    "pending": "పెండింగ్",
+    "available": "అందుబాటులో ఉంది",
+    "accepted": "ఆమోదించబడింది",
+    "assigned": "కేటాయించబడింది",
+    "pickupStarted": "పికప్ ప్రారంభమైంది",
+    "pickedUp": "పికప్ చేయబడింది",
+    "delivered": "డెలివరీ చేయబడింది",
+    "completed": "పూర్తయింది",
+    "cancelled": "రద్దు చేయబడింది"
+  },
+  "notifications": {
+    "title": "నోటిఫికేషన్లు",
+    "markAllRead": "అన్నీ చదివినట్లు గుర్తు పెట్టు",
+    "noNotifications": "ఇంకా నోటిఫికేషన్లు లేవు.",
+    "unread": "చదవలేదు"
+  },
+  "profile": {
+    "myProfile": "నా ప్రొఫైల్",
+    "personalInfo": "వ్యక్తిగత సమాచారం",
+    "accountSecurity": "ఖాతా భద్రత",
+    "accountRole": "ఖాతా పాత్ర",
+    "verified": "ధృవీకరించబడింది"
+  },
+  "settings": {
+    "settingsTitle": "సెట్టింగ్‌లు మరియు ప్రాధాన్యతలు",
+    "language": "భాష",
+    "currentLanguage": "ప్రస్తుత భాష",
+    "selectLanguage": "ఇష్టపడే భాషను ఎంచుకోండి",
+    "theme": "యాప్ థీమ్",
+    "darkMode": "డార్క్ మోడ్"
+  },
+  "chatbot": {
+    "title": "ఫుడ్ రీచ్ AI సహాయకుడు",
+    "placeholder": "AI సహాయకుడిని ఏదైనా అడగండి...",
+    "suggestions": "త్వరిత ప్రాంప్ట్‌లు"
+  }
+}

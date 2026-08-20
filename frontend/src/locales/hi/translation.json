@@ -1,0 +1,118 @@
+{
+  "common": {
+    "appName": "फूडरीच AI",
+    "ok": "ठीक है",
+    "cancel": "रद्द करें",
+    "save": "सहेजें",
+    "saveChanges": "परिवर्तन सहेजें",
+    "edit": "संपादित करें",
+    "delete": "हटाएं",
+    "search": "खोजें",
+    "loading": "लोड हो रहा है...",
+    "success": "सफलता",
+    "error": "त्रुटि",
+    "warning": "चेतावनी",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "back": "वापस",
+    "close": "बंद करें",
+    "submit": "जमा करें"
+  },
+  "nav": {
+    "dashboard": "डैशबोर्ड",
+    "createDonation": "दान करें",
+    "trackDonations": "डिलीवरी ट्रैक करें",
+    "browseDonations": "दान ब्राउज़ करें",
+    "myRequests": "मेरे अनुरोध",
+    "notifications": "सूचनाएं",
+    "profile": "प्रोफ़ाइल",
+    "settings": "सेटिंग्स",
+    "history": "इतिहास",
+    "volunteers": "स्वयंसेवक",
+    "logout": "साइन आउट"
+  },
+  "auth": {
+    "login": "साइन इन करें",
+    "register": "खाता बनाएं",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "email": "ईमेल पता",
+    "password": "पासवर्ड",
+    "currentPassword": "वर्तमान पासवर्ड",
+    "newPassword": "नया पासवर्ड",
+    "confirmPassword": "नए पासवर्ड की पुष्टि करें",
+    "changePassword": "पासवर्ड बदलें",
+    "fullName": "पूरा नाम",
+    "contactNumber": "संपर्क नंबर",
+    "address": "पता",
+    "role": "भूमिका",
+    "donor": "भोजन दाता",
+    "ngo": "एनजीओ पार्टनर",
+    "admin": "प्रशासक",
+    "invalidEmail": "कृपया एक मान्य ईमेल पता दर्ज करें।",
+    "passwordTooShort": "पासवर्ड बहुत कमजोर है। कम से कम 6 अक्षर होने चाहिए।",
+    "passwordsDoNotMatch": "नए पासवर्ड मेल नहीं खाते।",
+    "passwordUpdatedSuccess": "पासवर्ड सफलतापूर्वक अपडेट किया गया।"
+  },
+  "dashboard": {
+    "welcome": "स्वागत है",
+    "activeDonations": "सक्रिय भोजन ऑफ़र",
+    "quickActions": "त्वरित कार्य",
+    "recentActivity": "हाल की गतिविधि",
+    "stats": "विश्लेषण और प्रभाव",
+    "totalDonated": "कुल बचाया गया भोजन",
+    "mealsServed": "वितरित किया गया भोजन",
+    "peopleHelped": "पहुंचे हुए लोग"
+  },
+  "donation": {
+    "createTitle": "अतिरिक्त भोजन सूचीबद्ध करें",
+    "foodType": "भोजन श्रेणी",
+    "quantity": "मात्रा",
+    "unit": "इकाई",
+    "bestBefore": "शेल्फ लाइफ (घंटे)",
+    "prepTime": "तैयार किया गया (घंटे पहले)",
+    "temperature": "भंडारण तापमान (°C)",
+    "pickupAddress": "पिकअप पता",
+    "freshnessScore": "AI ताजगी स्कोर",
+    "submitDonation": "दान ऑफ़र प्रकाशित करें",
+    "createdSuccess": "दान सफलतापूर्वक सूचीबद्ध किया गया!",
+    "noDonations": "कोई दान उपलब्ध नहीं है।",
+    "status": "वर्तमान स्थिति"
+  },
+  "status": {
+    "pending": "लंबित",
+    "available": "उपलब्ध",
+    "accepted": "स्वीकृत",
+    "assigned": "आवंटित",
+    "pickupStarted": "पिकअप शुरू हुआ",
+    "pickedUp": "पिकअप किया गया",
+    "delivered": "डिलीवर किया गया",
+    "completed": "पूरा हुआ",
+    "cancelled": "रद्द किया गया"
+  },
+  "notifications": {
+    "title": "सूचनाएं",
+    "markAllRead": "सभी को पढ़ा हुआ चिह्नित करें",
+    "noNotifications": "अभी कोई सूचना नहीं है।",
+    "unread": "अपठित"
+  },
+  "profile": {
+    "myProfile": "मेरी प्रोफ़ाइल",
+    "personalInfo": "व्यक्तिगत जानकारी",
+    "accountSecurity": "खाता सुरक्षा",
+    "accountRole": "खाता भूमिका",
+    "verified": "सत्यापित"
+  },
+  "settings": {
+    "settingsTitle": "सेटिंग्स और प्राथमिकताएं",
+    "language": "भाषा",
+    "currentLanguage": "वर्तमान भाषा",
+    "selectLanguage": "पसंदीदा भाषा चुनें",
+    "theme": "ऐप थीम",
+    "darkMode": "डार्क मोड"
+  },
+  "chatbot": {
+    "title": "फूडरीच AI सहायक",
+    "placeholder": "AI सहायक से कुछ भी पूछें...",
+    "suggestions": "त्वरित संकेत"
+  }
+}
