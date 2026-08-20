@@ -1,6 +1,6 @@
 # FoodReach AI Platform 🌍🍲
 
-FoodShare AI is a comprehensive, production-grade web and mobile platform designed to bridge the gap between surplus food donors (restaurants, caterers, grocery stores) and NGOs/beneficiaries. The platform integrates **AI-driven freshness evaluation, smart geographical proximity matching, real-time delivery tracking, and administrative moderation panels**.
+FoodReach AI is a comprehensive, production-grade web and mobile platform designed to bridge the gap between surplus food donors (restaurants, caterers, grocery stores) and NGOs/beneficiaries. The platform integrates **AI-driven freshness evaluation, smart geographical proximity matching, real-time delivery tracking, and administrative moderation panels**.
 
 ---
 
@@ -28,7 +28,7 @@ graph TD
 * **Security & Auth**: JSON Web Token (JWT) request headers signing, bcryptjs credential password hashing, and role-based route middleware whitelists.
 * **Static Assets**: Express static mounts configured to serve uploaded donation files.
 
-### 3. Data & Storage Layer (MongoDB & Local Fallback)
+### 3. Data & Storage Layer ( Supabase PostgreSQL)
 * **Primary Database**: Mongoose model schemas configured for MongoDB Atlas clusters.
 * **RAM Mock Fallback**: Automatic in-memory mock database seed backup (`mockDb.ts`) that executes if external database connections fail, enabling instant runtime demonstration.
 * **Disk Write Fallback**: Saves uploaded base64 data payloads directly to server disks if external cloud media drives are unconfigured.
